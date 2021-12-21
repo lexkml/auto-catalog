@@ -19,10 +19,10 @@ public class CarController {
     }
 
     @PostMapping(value = "/cars")
-    public ResponseEntity<?> create(@RequestBody Car car) {
+    public ResponseEntity<Car> create(@RequestBody Car car) {
         carService.create(car);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(car, HttpStatus.OK);
     }
 
     @GetMapping(value = "/cars")
@@ -48,11 +48,11 @@ public class CarController {
     }
 
     @PutMapping(value = "/cars/{id}")
-    public ResponseEntity<?> update(@PathVariable(name = "id") int id, Car car) {
+    public ResponseEntity<Car> update(@PathVariable(name = "id") int id, Car car) {
         final boolean updated = carService.update(car, id);
 
         if (updated) {
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(car, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
         }
