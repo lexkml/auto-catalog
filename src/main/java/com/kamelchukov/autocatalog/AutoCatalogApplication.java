@@ -1,4 +1,4 @@
-package com.example.autocatalog;
+package com.kamelchukov.autocatalog;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
