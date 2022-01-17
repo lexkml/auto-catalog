@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    username: Alex
+    password: Alex
+    url: jdbc:postgresql://localhost:5432/auto
+    hikari:
+      schema: catalog
+
+  flyway:
+    schemas: catalog
+    #    значение baseline-on-migrate : false будет означать то,
+    #    что мы накатываем базу данных с нуля
+    baseline-on-migrate: true

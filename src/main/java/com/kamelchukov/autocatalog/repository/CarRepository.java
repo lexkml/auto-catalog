@@ -9,9 +9,8 @@ public interface CarRepository extends CrudRepository<Car, Integer> {
 
     public List <Car> findAll();
 
-    public Car getCarById(int id);
+    Car findById(Long id);
 
-    public void deleteById(int id);
-
+    public void deleteById(Long id);
 
 }
