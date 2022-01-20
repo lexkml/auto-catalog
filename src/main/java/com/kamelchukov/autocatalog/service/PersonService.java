@@ -30,11 +30,10 @@ public class PersonService {
     }
 
     public Person findById(Long id) {
-        Person person = personRepository.findById(id)
+        return personRepository.findById(id)
                 .orElseThrow(() -> {
                     throw new EntityNotFoundException("Person with id = " + id + " was not founded");
                 });
-        return person;
     }
 
     public List<Person> findAll() {
@@ -82,7 +81,7 @@ public class PersonService {
 
             if (carForDeleted == null) {
                 throw new EntityNotFoundException("Car with id = " + carId + " was not founded");
-            } else if (personId != (carForDeleted.getPersonId())) {
+            } else if (!personId.equals(carForDeleted.getPersonId())) {
                 throw new IncorrectDataException("Car with id = " + carId + " not owned Person with id = " + personId);
             }
 
@@ -108,7 +107,7 @@ public class PersonService {
 
             if (carForDeleted == null) {
                 throw new EntityNotFoundException("Car with id = " + carId + " was not founded");
-            } else if (personId != (carForDeleted.getPersonId())) {
+            } else if (!personId.equals(carForDeleted.getPersonId())) {
                 throw new IncorrectDataException("Car with id = " + carId + " not owned Person with id = " + personId);
             }
 

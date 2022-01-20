@@ -35,7 +35,7 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
             Exception e, ServletWebRequest request, HttpStatus status) {
         logger.error(Arrays.toString(e.getStackTrace()));
 
-        return new ResponseEntity<ExceptionResponse>(
+        return new ResponseEntity<>(
                 new ExceptionResponse(e.getMessage(), request.getRequest().getRequestURI()),
                 status);
     }

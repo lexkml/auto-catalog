@@ -23,15 +23,14 @@ public class CarService {
     }
 
     public Car findById(Long id) {
-        Car car = carRepository.findById(id)
+        return carRepository.findById(id)
                 .orElseThrow(() -> {
                     throw new EntityNotFoundException("Car with id = " + id + " was not found");
                 });
-        return car;
     }
 
     public List<Car> findAll() {
-        List<Car> list = new ArrayList<Car>();
+        List<Car> list = new ArrayList<>();
         carRepository.findAll().forEach(list::add);
         return list;
     }
