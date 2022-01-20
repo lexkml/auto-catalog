@@ -2,7 +2,6 @@ package com.kamelchukov.autocatalog.controller;
 
 import com.kamelchukov.autocatalog.model.Car;
 import com.kamelchukov.autocatalog.model.dto.carDto.CarCreateRequest;
-import com.kamelchukov.autocatalog.model.dto.carDto.CarUpdateRequest;
 import com.kamelchukov.autocatalog.service.CarService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,11 +17,10 @@ public class CarController {
 
     private final CarService carService;
 
-    @GetMapping("/cars")
-    @Operation(summary = "Find all cars")
-    public List<Car> findAll() {
-        List<Car> list = carService.findAll();
-        return list;
+    @PostMapping("/cars")
+    @Operation(summary = "Save car")
+    public Car save(@RequestBody CarCreateRequest carCreateRequest) {
+        return carService.save(carCreateRequest);
     }
 
     @GetMapping("/cars/{id}")
@@ -31,26 +29,21 @@ public class CarController {
         return carService.findById(id);
     }
 
-
-    @PostMapping("/cars")
-    @Operation(summary = "Save car")
-    public Car save(@RequestBody CarCreateRequest carCreateRequest) {
-        Car car = carCreateRequest.dtoToCar();
-        carService.save(car);
-        return car;
+    @GetMapping("/cars")
+    @Operation(summary = "Find all cars")
+    public List<Car> findAll() {
+        return carService.findAll();
     }
 
     @PutMapping("/cars/{id}")
     @Operation(summary = "Edit car by ID")
-    public Car edit(@PathVariable Long id, @RequestBody CarUpdateRequest carUpdateRequest) {
-        Car car = carService.update(id, carUpdateRequest);
-        return car;
+    public Car edit(@PathVariable Long id, @RequestParam int price) {
+        return carService.editCarById(id, price);
     }
 
     @DeleteMapping("/cars/{id}")
     @Operation(summary = "Delete car by ID")
-    public String delete(@PathVariable Long id) {
-        carService.delete(id);
-        return "Car with id = " + id + " was deleted";
+    public Car delete(@PathVariable Long id) {
+        return carService.delete(id);
     }
 }

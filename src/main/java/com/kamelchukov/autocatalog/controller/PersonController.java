@@ -1,5 +1,6 @@
 package com.kamelchukov.autocatalog.controller;
 
+import com.kamelchukov.autocatalog.model.Car;
 import com.kamelchukov.autocatalog.model.Person;
 import com.kamelchukov.autocatalog.model.dto.personDto.PersonAddOrDeleteCarsRequest;
 import com.kamelchukov.autocatalog.model.dto.personDto.PersonCreateAndDeleteCarsRequest;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
@@ -23,22 +25,7 @@ public class PersonController {
     @PostMapping("/persons")
     @Operation(summary = "Save person")
     public Person save(@RequestBody PersonCreateRequest personCreateRequest) {
-        Person person = personCreateRequest.dtoToPerson();
-        personService.save(person);
-        return person;
-    }
-
-    @PutMapping("/person/{id}")
-    @Operation(summary = "Edit person by ID")
-    public Person update(@PathVariable Long id, @RequestBody PersonUpdateRequest personUpdateRequest) {
-        return personService.update(id, personUpdateRequest);
-    }
-
-    @GetMapping("/persons")
-    @Operation(summary = "Find all persons")
-    public List<Person> findAll() {
-        List<Person> list = personService.findAll();
-        return list;
+        return personService.save(personCreateRequest);
     }
 
     @GetMapping("/persons/{id}")
@@ -47,10 +34,22 @@ public class PersonController {
         return personService.findById(id);
     }
 
+    @GetMapping("/persons")
+    @Operation(summary = "Find all persons")
+    public List<Person> findAll() {
+        return personService.findAll();
+    }
+
+    @PutMapping("/person/{id}")
+    @Operation(summary = "Edit person by ID")
+    public Person editById(@PathVariable Long id, @RequestBody PersonUpdateRequest personUpdateRequest) {
+        return personService.editById(id, personUpdateRequest);
+    }
+
     @DeleteMapping("/persons/{id}")
     @Operation(summary = "Delete person by ID")
-    public void deleteById(@PathVariable Long id) {
-        personService.deleteById(id);
+    public Person deleteById(@PathVariable Long id) {
+       return personService.deleteById(id);
     }
 
     @PostMapping("/person/{id}/cars")
@@ -61,13 +60,13 @@ public class PersonController {
 
     @DeleteMapping("/person/{id}/cars")
     @Operation(summary = "Delete cars by IDs for Person by ID")
-    public Person deleteCarsFromPerson(@PathVariable Long id, @RequestBody PersonAddOrDeleteCarsRequest request) {
+    public List<Car> deleteCarsFromPerson(@PathVariable Long id, @RequestBody PersonAddOrDeleteCarsRequest request) {
         return personService.deleteCarsFromPerson(id, request);
     }
 
     @PatchMapping("/person/{id}/cars")
     @Operation(summary = "Add and Delete cars for Person by ID")
-    public Person addAndDeleteCarsForPerson(@PathVariable Long id, @RequestBody PersonCreateAndDeleteCarsRequest request) {
+    public Map<Car, String> addAndDeleteCarsForPerson(@PathVariable Long id, @RequestBody PersonCreateAndDeleteCarsRequest request) {
         return personService.addAndDeleteCarsForPerson(id, request);
     }
 }

@@ -1,30 +1,20 @@
 package com.kamelchukov.autocatalog.model.dto.carDto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kamelchukov.autocatalog.model.Car;
-import lombok.*;
+import lombok.Data;
 
 @Data
 public class CarCreateRequest {
-    @JsonIgnore
-    private Long id;
 
     private String model;
-
-    @JsonProperty("class_car")
     private char classCar;
-
     private String year;
     private String color;
     private int price;
-
-    @JsonProperty("person_id")
-    private Long personId = null;
+    private Long personId;
 
     public Car dtoToCar() {
         return Car.builder()
-                .id(getId())
                 .model(getModel())
                 .classCar(getClassCar())
                 .year(getYear())

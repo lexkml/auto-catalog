@@ -16,7 +16,7 @@ import java.util.Arrays;
 public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
 
-    @org.springframework.web.bind.annotation.ExceptionHandler
+    @org.springframework.web.bind.annotation.ExceptionHandler(EntityNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ExceptionResponse> handleException(EntityNotFoundException ex, ServletWebRequest request) {
 
@@ -25,13 +25,18 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler(IncorrectDataException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<?> handleNotFound(IncorrectDataException ex, ServletWebRequest request) {
+    public ResponseEntity<ExceptionResponse> handleException(IncorrectDataException ex, ServletWebRequest request) {
+
         return logAndReturnExceptionResponse(ex, request, HttpStatus.BAD_REQUEST);
     }
 
 
-    private ResponseEntity<ExceptionResponse> logAndReturnExceptionResponse(Exception e, ServletWebRequest request, HttpStatus status) {
+    private ResponseEntity<ExceptionResponse> logAndReturnExceptionResponse(
+            Exception e, ServletWebRequest request, HttpStatus status) {
         logger.error(Arrays.toString(e.getStackTrace()));
-        return new ResponseEntity<ExceptionResponse>(new ExceptionResponse(e.getMessage(), request.getRequest().getRequestURI()), status);
+
+        return new ResponseEntity<ExceptionResponse>(
+                new ExceptionResponse(e.getMessage(), request.getRequest().getRequestURI()),
+                status);
     }
 }

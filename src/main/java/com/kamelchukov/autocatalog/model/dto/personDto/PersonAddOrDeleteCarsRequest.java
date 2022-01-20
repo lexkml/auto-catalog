@@ -6,6 +6,5 @@ import java.util.Set;
 
 @Data
 public class PersonAddOrDeleteCarsRequest {
-
     private Set<Long> cars;
 }

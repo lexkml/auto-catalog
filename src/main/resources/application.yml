@@ -8,6 +8,4 @@ spring:
 
   flyway:
     schemas: catalog
-    #    значение baseline-on-migrate : false будет означать то,
-    #    что мы накатываем базу данных с нуля
     baseline-on-migrate: true

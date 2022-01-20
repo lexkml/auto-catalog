@@ -6,6 +6,6 @@ import java.util.Set;
 
 @Data
 public class PersonCreateAndDeleteCarsRequest {
-    Set<Long> toAddCars;
     Set<Long> toDeleteCars;
+    Set<Long> toAddCars;
 }

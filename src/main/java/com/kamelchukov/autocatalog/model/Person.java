@@ -7,16 +7,14 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.util.Set;
 
-@Table
 @Data
 @Builder
+@Table("person")
 public class Person {
-
     @Id
     private Long id;
 
     private String firstName;
-
     private String lastName;
 
     @MappedCollection(idColumn = "person_id")

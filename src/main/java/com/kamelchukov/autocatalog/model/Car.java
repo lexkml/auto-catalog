@@ -5,9 +5,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table("car")
 @Data
 @Builder
+@Table("car")
 public class Car {
     @Id
     private Long id;
@@ -22,7 +22,7 @@ public class Car {
     private int price;
 
     @Column("person_id")
-    private Long personId = null;
+    private Long personId;
 }
 
 
