@@ -5,6 +5,5 @@ CREATE TABLE car
     class     CHAR        NOT NULL,
     year      VARCHAR(4)  NOT NULL,
     color     VARCHAR(20) NOT NULL,
-    price     INTEGER     NOT NULL,
     person_id BIGINT REFERENCES catalog.person (id)
 );

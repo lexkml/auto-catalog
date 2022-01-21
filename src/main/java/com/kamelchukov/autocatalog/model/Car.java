@@ -1,6 +1,7 @@
 package com.kamelchukov.autocatalog.model;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -19,9 +20,6 @@ public class Car {
 
     private String year;
     private String color;
-    private int price;
-
-    @Column("person_id")
     private Long personId;
 }
 

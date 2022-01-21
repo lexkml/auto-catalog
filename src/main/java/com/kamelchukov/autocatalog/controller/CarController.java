@@ -1,49 +1,44 @@
 package com.kamelchukov.autocatalog.controller;
 
-import com.kamelchukov.autocatalog.model.Car;
-import com.kamelchukov.autocatalog.model.dto.carDto.CarCreateRequest;
+import com.kamelchukov.autocatalog.model.dto.carDto.request.CarCreateRequest;
+import com.kamelchukov.autocatalog.model.dto.carDto.response.CarResponse;
 import com.kamelchukov.autocatalog.service.CarService;
+import com.kamelchukov.autocatalog.transformer.CarTransformer;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequiredArgsConstructor
+@AllArgsConstructor
 @RestController
 @Tag(name = "Car controller")
 public class CarController {
 
-    private final CarService carService;
+    private CarService carService;
 
     @PostMapping("/cars")
-    @Operation(summary = "Save car")
-    public Car save(@RequestBody CarCreateRequest carCreateRequest) {
-        return carService.save(carCreateRequest);
+    @Operation(summary = "Create car")
+    public CarResponse create(@RequestBody CarCreateRequest carCreateRequest) {
+        return CarTransformer.toResponse(carService.create(carCreateRequest));
     }
 
     @GetMapping("/cars/{id}")
     @Operation(summary = "Find car by ID")
-    public Car findById(@PathVariable Long id) {
-        return carService.findById(id);
+    public CarResponse findById(@PathVariable Long id) {
+        return CarTransformer.toResponse(carService.findById(id));
     }
 
     @GetMapping("/cars")
     @Operation(summary = "Find all cars")
-    public List<Car> findAll() {
+    public List<CarResponse> findAll() {
         return carService.findAll();
     }
 
-    @PutMapping("/cars/{id}")
-    @Operation(summary = "Edit car by ID")
-    public Car edit(@PathVariable Long id, @RequestParam int price) {
-        return carService.editCarById(id, price);
-    }
-
     @DeleteMapping("/cars/{id}")
-    @Operation(summary = "Delete car by ID")
-    public Car delete(@PathVariable Long id) {
-        return carService.delete(id);
+    @Operation(summary = "Delete car")
+    public void delete(@PathVariable Long id) {
+        carService.delete(id);
     }
 }

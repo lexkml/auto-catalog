@@ -4,29 +4,27 @@ import com.kamelchukov.autocatalog.exception.EntityNotFoundException;
 import com.kamelchukov.autocatalog.exception.IncorrectDataException;
 import com.kamelchukov.autocatalog.model.Car;
 import com.kamelchukov.autocatalog.model.Person;
-import com.kamelchukov.autocatalog.model.dto.personDto.PersonAddOrDeleteCarsRequest;
-import com.kamelchukov.autocatalog.model.dto.personDto.PersonCreateAndDeleteCarsRequest;
-import com.kamelchukov.autocatalog.model.dto.personDto.PersonCreateRequest;
-import com.kamelchukov.autocatalog.model.dto.personDto.PersonUpdateRequest;
-import com.kamelchukov.autocatalog.repository.CarRepository;
+import com.kamelchukov.autocatalog.model.dto.personDto.request.PersonAddAndRemoveCarsRequest;
+import com.kamelchukov.autocatalog.model.dto.personDto.request.PersonCreateRequest;
+import com.kamelchukov.autocatalog.model.dto.personDto.response.PersonResponse;
 import com.kamelchukov.autocatalog.repository.PersonRepository;
-import lombok.RequiredArgsConstructor;
+import com.kamelchukov.autocatalog.transformer.PersonTransformer;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Service
-@RequiredArgsConstructor
+@AllArgsConstructor
 public class PersonService {
 
-    private final PersonRepository personRepository;
-    private final CarRepository carRepository;
-    private final CarService carService;
+    private PersonRepository personRepository;
+    private CarService carService;
 
-    public Person save(PersonCreateRequest personCreateRequest) {
-        Person person = personCreateRequest.dtoToPerson();
-        personRepository.save(person);
-        return person;
+    public Person create(PersonCreateRequest request) {
+        return personRepository.save(PersonTransformer.fromDto(request));
     }
 
     public Person findById(Long id) {
@@ -36,103 +34,52 @@ public class PersonService {
                 });
     }
 
-    public List<Person> findAll() {
-        List<Person> list = new ArrayList<>();
-        personRepository.findAll().forEach(list::add);
+    public List<PersonResponse> findAll() {
+        List<PersonResponse> list = new ArrayList<>();
+        personRepository.findAll().forEach(
+                person -> list.add(PersonTransformer.toResponse(person)));
         return list;
     }
 
-    public Person editById(Long id, PersonUpdateRequest personUpdateRequest) {
-        Person person = findById(id);
-        person.setFirstName(personUpdateRequest.getFirstName());
-        person.setLastName(personUpdateRequest.getLastName());
-        return person;
+    public void delete(Long id) {
+        if (personRepository.existsById(id)) {
+            personRepository.deleteById(id);
+        } else {
+            throw new EntityNotFoundException("Person with id = " + id + " was not founded");
+        }
     }
 
-    public Person deleteById(Long id) {
-        Person person = findById(id);
-        personRepository.delete(person);
-        return person;
+    public PersonResponse addCarsToPerson(Long personId, Set<Long> carsId) {
+        for (Long carId : carsId) {
+            Car carToAdd = carService.findById(carId);
+            if (carToAdd.getPersonId() != null) {
+                throw new IncorrectDataException(
+                        "Car with id = " + carId + " owned Person with id = " + carToAdd.getPersonId());
+            } else {
+                carToAdd.setPersonId(personId);
+                carService.save(carToAdd);
+            }
+        }
+        return PersonTransformer.toResponse(findById(personId));
     }
 
-    public Person addCarsToPerson(Long personId, PersonAddOrDeleteCarsRequest request) {
+    public PersonResponse removeCarsFromPerson(Long personId, Set<Long> carsId) {
+        for (Long carId : carsId) {
+            Car carToRemove = carService.findById(carId);
+            if (!personId.equals(carToRemove.getPersonId())) {
+                throw new IncorrectDataException("Car with id = " + carId + " not owned this Person!");
+            } else {
+                carToRemove.setPersonId(null);
+                carService.save(carToRemove);
+            }
+        }
+        return PersonTransformer.toResponse(findById(personId));
+    }
+
+    public PersonResponse addAndRemoveCarsFromPerson(Long personId, PersonAddAndRemoveCarsRequest request) {
         Person person = findById(personId);
-
-        for (Long carId : request.getCars()) {
-            Car carForAdded = carService.findById(carId);
-
-            if (carForAdded == null) {
-                throw new EntityNotFoundException("Car with id = " + carId + " was not founded");
-            }
-
-            carForAdded.setPersonId(personId);
-            carRepository.save(carForAdded);
-        }
-
-        return person;
-    }
-
-    public List<Car> deleteCarsFromPerson(Long personId, PersonAddOrDeleteCarsRequest request) {
-        Person person = findById(personId);
-        List<Car> deletedCars = new ArrayList<>();
-
-        for (Long carId : request.getCars()) {
-            Car carForDeleted = carService.findById(carId);
-
-            if (carForDeleted == null) {
-                throw new EntityNotFoundException("Car with id = " + carId + " was not founded");
-            } else if (!personId.equals(carForDeleted.getPersonId())) {
-                throw new IncorrectDataException("Car with id = " + carId + " not owned Person with id = " + personId);
-            }
-
-            Set<Car> cars = person.getCars();
-
-            if (cars.contains(carForDeleted)) {
-                carForDeleted.setPersonId(null);
-                carRepository.save(carForDeleted);
-
-                deletedCars.add(carForDeleted);
-            }
-        }
-        return deletedCars;
-    }
-
-    public Map<Car, String> addAndDeleteCarsForPerson(Long personId, PersonCreateAndDeleteCarsRequest request) {
-        Person person = findById(personId);
-        Set<Car> cars = person.getCars();
-        Map<Car, String> addedAndDeletedCars = new HashMap<>();
-
-        for (Long carId : request.getToDeleteCars()) {
-            Car carForDeleted = carService.findById(carId);
-
-            if (carForDeleted == null) {
-                throw new EntityNotFoundException("Car with id = " + carId + " was not founded");
-            } else if (!personId.equals(carForDeleted.getPersonId())) {
-                throw new IncorrectDataException("Car with id = " + carId + " not owned Person with id = " + personId);
-            }
-
-            if (cars.contains(carForDeleted)) {
-                carForDeleted.setPersonId(null);
-                carRepository.save(carForDeleted);
-                addedAndDeletedCars.put(carForDeleted, "Deleted");
-            }
-        }
-
-        for (Long carId : request.getToAddCars()) {
-            Car carForAdded = carService.findById(carId);
-
-            if (carForAdded == null) {
-                throw new EntityNotFoundException("Car with id = " + carId + " was not founded");
-            } else if (carForAdded.getPersonId() != null) {
-                throw new IncorrectDataException("Car with id = " + carId + " owned Person with id = " + carForAdded.getPersonId());
-            }
-
-            if (!cars.contains(carForAdded)) {
-                carForAdded.setPersonId(personId);
-                carRepository.save(carForAdded);
-                addedAndDeletedCars.put(carForAdded, "Added");
-            }
-        }
-        return addedAndDeletedCars;
+        removeCarsFromPerson(personId, request.getCarsToRemove());
+        addCarsToPerson(personId, request.getCarsToAdd());
+        return PersonTransformer.toResponse(person);
     }
 }

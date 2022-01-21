@@ -1,4 +1,4 @@
-package com.kamelchukov.autocatalog.exception;
+package com.kamelchukov.autocatalog.exception.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
