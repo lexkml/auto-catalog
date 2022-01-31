@@ -3,7 +3,6 @@ package com.kamelchukov.autocatalog.service;
 import com.kamelchukov.autocatalog.exception.EntityNotFoundException;
 import com.kamelchukov.autocatalog.model.Car;
 import com.kamelchukov.autocatalog.model.dto.carDto.request.CarCreateRequest;
-import com.kamelchukov.autocatalog.model.dto.carDto.response.CarResponse;
 import com.kamelchukov.autocatalog.repository.CarRepository;
 import com.kamelchukov.autocatalog.transformer.CarTransformer;
 import lombok.AllArgsConstructor;
@@ -31,9 +30,9 @@ public class CarService {
                 });
     }
 
-    public List<CarResponse> findAll() {
-        List<CarResponse> list = new ArrayList<>();
-        carRepository.findAll().forEach(car -> list.add(CarTransformer.toResponse(car)));
+    public List<Car> findAll() {
+        List<Car> list = new ArrayList<>();
+        carRepository.findAll().forEach(list::add);
         return list;
     }
 

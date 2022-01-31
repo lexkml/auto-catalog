@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
@@ -33,7 +34,7 @@ public class CarController {
     @GetMapping("/cars")
     @Operation(summary = "Find all cars")
     public List<CarResponse> findAll() {
-        return carService.findAll();
+        return carService.findAll().stream().map(CarTransformer::toResponse).collect(Collectors.toList());
     }
 
     @DeleteMapping("/cars/{id}")

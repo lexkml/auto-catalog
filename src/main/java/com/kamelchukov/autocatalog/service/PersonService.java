@@ -30,7 +30,7 @@ public class PersonService {
     public Person findById(Long id) {
         return personRepository.findById(id)
                 .orElseThrow(() -> {
-                    throw new EntityNotFoundException("Person with id = " + id + " was not founded");
+                    throw new EntityNotFoundException("Person with id = " + id + " was not found");
                 });
     }
 
@@ -45,7 +45,7 @@ public class PersonService {
         if (personRepository.existsById(id)) {
             personRepository.deleteById(id);
         } else {
-            throw new EntityNotFoundException("Person with id = " + id + " was not founded");
+            throw new EntityNotFoundException("Person with id = " + id + " was not found");
         }
     }
 
