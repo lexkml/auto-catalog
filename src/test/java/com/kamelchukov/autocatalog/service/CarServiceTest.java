@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -62,7 +63,7 @@ class CarServiceTest {
 
         carService.create(request);
 
-        assertThat(resultCar).isEqualTo(car);
+        assertEquals(resultCar, car);
     }
 
     @Test
@@ -71,7 +72,7 @@ class CarServiceTest {
 
         var result = carService.findById(15L);
 
-        assertThat(result).isEqualTo(car);
+        assertEquals(result, car);
     }
 
     @Test
@@ -96,7 +97,7 @@ class CarServiceTest {
 
         carService.delete(anyLong());
 
-//        ????
+        verify(carRepository).deleteById(anyLong());
     }
 
     @Test
@@ -111,6 +112,6 @@ class CarServiceTest {
 
         carService.save(savedCar);
 
-        assertThat(savedCar).isEqualTo(car);
+        assertEquals(savedCar, car);
     }
 }

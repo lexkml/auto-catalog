@@ -18,9 +18,7 @@ public class CarService {
     private CarRepository carRepository;
 
     public Car create(CarCreateRequest request) {
-        Car car = CarTransformer.fromDto(request);
-        carRepository.save(car);
-        return car;
+        return carRepository.save(CarTransformer.fromDto(request));
     }
 
     public Car findById(Long id) {

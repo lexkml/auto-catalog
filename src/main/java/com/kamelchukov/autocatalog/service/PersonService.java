@@ -34,10 +34,9 @@ public class PersonService {
                 });
     }
 
-    public List<PersonResponse> findAll() {
-        List<PersonResponse> list = new ArrayList<>();
-        personRepository.findAll().forEach(
-                person -> list.add(PersonTransformer.toResponse(person)));
+    public List<Person> findAll() {
+        List<Person> list = new ArrayList<>();
+        personRepository.findAll().forEach(list::add);
         return list;
     }
 

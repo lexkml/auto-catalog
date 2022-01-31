@@ -12,13 +12,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
 @Tag(name = "Person controller")
 public class PersonController {
 
-    private  PersonService personService;
+    private PersonService personService;
 
     @PostMapping("/persons")
     @Operation(summary = "Create person")
@@ -35,7 +36,7 @@ public class PersonController {
     @GetMapping("/persons")
     @Operation(summary = "Find all persons")
     public List<PersonResponse> findAll() {
-        return personService.findAll();
+        return personService.findAll().stream().map(PersonTransformer::toResponse).collect(Collectors.toList());
     }
 
     @DeleteMapping("/persons/{id}")
