@@ -122,14 +122,13 @@ class PersonServiceTest {
     void addCarsToPersonTest_successfulCase() {
         var carToAdd = car;
         carToAdd.setPersonId(null);
-       PersonTransformer.toResponse(person);
 
         when(carService.findById(anyLong())).thenReturn(carToAdd);
         doNothing().when(carService).save(carToAdd);
 
-       personService.addCarsToPerson(person.getId(), Set.of(anyLong()));
+        personService.addCarsToPerson(person.getId(), Set.of(anyLong()));
 
-        verify(carService, atLeast(1)).save(any(Car.class));
+        verify(carService).save(any(Car.class));
     }
 
     @Test
@@ -186,7 +185,7 @@ class PersonServiceTest {
         request.setCarsToAdd(Set.of(2L));
 
         doReturn(null).when(personServiceSpy).removeCarsFromPerson(anyLong(), any());
-        doReturn(null).when(personServiceSpy).addCarsToPerson(anyLong(), any()); //а здесь мы программируем этот метод
+        doReturn(null).when(personServiceSpy).addCarsToPerson(anyLong(), any());
 
         personServiceSpy.addAndRemoveCarsFromPerson(person.getId(), request);
 

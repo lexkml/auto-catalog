@@ -64,7 +64,7 @@ class CarServiceTest {
     void findByIdTest_successfulCase() {
         when(carRepository.findById(anyLong())).thenReturn(Optional.of(car));
 
-        var result = carService.findById(15L);
+        var result = carService.findById(anyLong());
 
         assertEquals(car, result);
     }
@@ -104,12 +104,11 @@ class CarServiceTest {
     }
 
     @Test
-    void saveTest() {
+    void saveTest_successfulCase() {
         when(carRepository.save(any(Car.class))).thenReturn(car);
-        var savedCar = car;
 
-        carService.save(savedCar);
+        carService.save(car);
 
-        assertEquals(car, savedCar);
+        verify(carRepository).save(any(Car.class));
     }
 }
