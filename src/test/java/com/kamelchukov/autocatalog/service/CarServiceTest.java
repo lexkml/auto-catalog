@@ -5,7 +5,6 @@ import com.kamelchukov.autocatalog.model.Car;
 import com.kamelchukov.autocatalog.model.dto.carDto.request.CarCreateRequest;
 import com.kamelchukov.autocatalog.repository.CarRepository;
 import com.kamelchukov.autocatalog.transformer.CarTransformer;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,22 +31,17 @@ class CarServiceTest {
     @Mock
     private CarRepository carRepository;
 
-    private static Car car;
-
-    @BeforeEach
-    void beforeEach() {
-        car = Car.builder()
-                .id(15L)
-                .model("Tesla")
-                .classCar('S')
-                .color("Black")
-                .year("2020")
-                .personId(null)
-                .build();
-    }
+    private static final Car car = Car.builder()
+            .id(15L)
+            .model("Tesla")
+            .classCar('S')
+            .color("Black")
+            .year("2020")
+            .personId(null)
+            .build();
 
     @Test
-    void create() {
+    void createTest_successfulCase() {
         var request = CarCreateRequest.builder()
                 .model(car.getModel())
                 .classCar(car.getClassCar())
@@ -63,35 +57,37 @@ class CarServiceTest {
 
         carService.create(request);
 
-        assertEquals(resultCar, car);
+        assertEquals(car, resultCar);
     }
 
     @Test
-    void findById() {
+    void findByIdTest_successfulCase() {
         when(carRepository.findById(anyLong())).thenReturn(Optional.of(car));
 
         var result = carService.findById(15L);
 
-        assertEquals(result, car);
+        assertEquals(car, result);
     }
 
     @Test
-    void findByIdIfCarNotFound() {
+    void findByIdTest_IfCarNotFound() {
+        when(carRepository.findById(anyLong())).thenReturn(Optional.empty());
+
         assertThrows(EntityNotFoundException.class, () -> carService.findById(anyLong()));
     }
 
     @Test
-    void findAll() {
+    void findAllTest_successfulCase() {
         var cars = List.of(car);
         when(carRepository.findAll()).thenReturn(cars);
 
         var result = carService.findAll();
 
-        assertThat(result).containsAll(cars);
+        assertThat(cars).containsAll(result);
     }
 
     @Test
-    void delete() {
+    void deleteTest_successfulCase() {
         when(carRepository.existsById(anyLong())).thenReturn(true);
         doNothing().when(carRepository).deleteById(anyLong());
 
@@ -101,17 +97,19 @@ class CarServiceTest {
     }
 
     @Test
-    void deleteFailIfCarNotFound() {
+    void deleteTest_IfCarNotFound() {
+        when(carRepository.existsById(anyLong())).thenReturn(false);
+
         assertThrows(EntityNotFoundException.class, () -> carService.delete(anyLong()));
     }
 
     @Test
-    void save() {
+    void saveTest() {
         when(carRepository.save(any(Car.class))).thenReturn(car);
         var savedCar = car;
 
         carService.save(savedCar);
 
-        assertEquals(savedCar, car);
+        assertEquals(car, savedCar);
     }
 }

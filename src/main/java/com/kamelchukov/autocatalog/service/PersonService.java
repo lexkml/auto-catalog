@@ -65,7 +65,7 @@ public class PersonService {
     public PersonResponse removeCarsFromPerson(Long personId, Set<Long> carsId) {
         for (Long carId : carsId) {
             Car carToRemove = carService.findById(carId);
-            if (!personId.equals(carToRemove.getPersonId())) {
+            if (carToRemove.getPersonId() == null || !carToRemove.getPersonId().equals(personId)) {
                 throw new IncorrectDataException("Car with id = " + carId + " not owned this Person!");
             } else {
                 carToRemove.setPersonId(null);
@@ -76,9 +76,8 @@ public class PersonService {
     }
 
     public PersonResponse addAndRemoveCarsFromPerson(Long personId, PersonAddAndRemoveCarsRequest request) {
-        Person person = findById(personId);
         removeCarsFromPerson(personId, request.getCarsToRemove());
         addCarsToPerson(personId, request.getCarsToAdd());
-        return PersonTransformer.toResponse(person);
+        return PersonTransformer.toResponse(findById(personId));
     }
 }
