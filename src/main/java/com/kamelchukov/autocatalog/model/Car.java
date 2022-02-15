@@ -3,7 +3,6 @@ package com.kamelchukov.autocatalog.model;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
 @Data
@@ -14,10 +13,6 @@ public class Car {
     private Long id;
 
     private String model;
-
-    @Column("class")
-    private char classCar;
-
     private String year;
     private String color;
     private Long personId;

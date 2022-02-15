@@ -1,13 +1,13 @@
 package com.kamelchukov.autocatalog.service;
 
-import com.kamelchukov.autocatalog.exception.EntityNotFoundException;
-import com.kamelchukov.autocatalog.exception.IncorrectDataException;
 import com.kamelchukov.autocatalog.model.Car;
 import com.kamelchukov.autocatalog.model.Person;
 import com.kamelchukov.autocatalog.model.dto.personDto.request.PersonAddAndRemoveCarsRequest;
 import com.kamelchukov.autocatalog.model.dto.personDto.request.PersonCreateRequest;
 import com.kamelchukov.autocatalog.repository.PersonRepository;
 import com.kamelchukov.autocatalog.transformer.PersonTransformer;
+import exception.EntityNotFoundException;
+import exception.IncorrectDataException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +41,6 @@ class PersonServiceTest {
     private static final Car car = Car.builder()
             .id(2L)
             .model("Tesla")
-            .classCar('S')
             .color("Black")
             .year("2020")
             .personId(null)

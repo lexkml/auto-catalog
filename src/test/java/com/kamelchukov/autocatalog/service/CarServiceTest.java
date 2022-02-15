@@ -1,10 +1,12 @@
 package com.kamelchukov.autocatalog.service;
 
-import com.kamelchukov.autocatalog.exception.EntityNotFoundException;
 import com.kamelchukov.autocatalog.model.Car;
 import com.kamelchukov.autocatalog.model.dto.carDto.request.CarCreateRequest;
+import com.kamelchukov.autocatalog.model.dto.carDto.response.FullDataOfCarResponse;
 import com.kamelchukov.autocatalog.repository.CarRepository;
+import com.kamelchukov.autocatalog.repository.FullDataOfCarRepository;
 import com.kamelchukov.autocatalog.transformer.CarTransformer;
+import exception.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,42 +33,53 @@ class CarServiceTest {
     @Mock
     private CarRepository carRepository;
 
-    private static final Car car = Car.builder()
+    @Mock
+    private FullDataOfCarRepository fullDataOfCarRepository;
+
+    private static final Car CAR = Car.builder()
             .id(15L)
             .model("Tesla")
-            .classCar('S')
             .color("Black")
             .year("2020")
             .personId(null)
             .build();
 
+    private static final FullDataOfCarResponse FULL_DATA_OF_CAR = FullDataOfCarResponse.builder()
+            .id(15L)
+            .model("Tesla")
+            .color("Black")
+            .year("2020")
+            .personId(5L)
+            .firstName("Ivan")
+            .lastName("Ivanov")
+            .build();
+
     @Test
     void createTest_successfulCase() {
         var request = CarCreateRequest.builder()
-                .model(car.getModel())
-                .classCar(car.getClassCar())
-                .color(car.getColor())
-                .year(car.getYear())
-                .personId(car.getPersonId())
+                .model(CAR.getModel())
+                .color(CAR.getColor())
+                .year(CAR.getYear())
+                .personId(CAR.getPersonId())
                 .build();
 
         var resultCar = CarTransformer.fromDto(request);
-        resultCar.setId(car.getId());
+        resultCar.setId(CAR.getId());
 
-        when(carRepository.save(any(Car.class))).thenReturn(car);
+        when(carRepository.save(any(Car.class))).thenReturn(CAR);
 
         carService.create(request);
 
-        assertEquals(car, resultCar);
+        assertEquals(CAR, resultCar);
     }
 
     @Test
     void findByIdTest_successfulCase() {
-        when(carRepository.findById(anyLong())).thenReturn(Optional.of(car));
+        when(carRepository.findById(anyLong())).thenReturn(Optional.of(CAR));
 
         var result = carService.findById(anyLong());
 
-        assertEquals(car, result);
+        assertEquals(CAR, result);
     }
 
     @Test
@@ -78,7 +91,7 @@ class CarServiceTest {
 
     @Test
     void findAllTest_successfulCase() {
-        var cars = List.of(car);
+        var cars = List.of(CAR);
         when(carRepository.findAll()).thenReturn(cars);
 
         var result = carService.findAll();
@@ -105,10 +118,36 @@ class CarServiceTest {
 
     @Test
     void saveTest_successfulCase() {
-        when(carRepository.save(any(Car.class))).thenReturn(car);
+        when(carRepository.save(any(Car.class))).thenReturn(CAR);
 
-        carService.save(car);
+        carService.save(CAR);
 
         verify(carRepository).save(any(Car.class));
+    }
+
+    @Test
+    void findFullDataOfCarByIdTest_successfulCase() {
+        when(fullDataOfCarRepository.findFullDataOfCarById(anyLong())).thenReturn(Optional.of(FULL_DATA_OF_CAR));
+
+        var result = carService.findFullDataOfCarById(anyLong());
+
+        assertEquals(FULL_DATA_OF_CAR, result);
+    }
+
+    @Test
+    void findFullDataOfCarByIdTest_ifCarNotFound() {
+        when(fullDataOfCarRepository.findFullDataOfCarById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(EntityNotFoundException.class, () -> carService.findFullDataOfCarById(anyLong()));
+    }
+
+    @Test
+    void findFullDataAllOfCarsTest_successfulCase() {
+        var list = List.of(FULL_DATA_OF_CAR);
+        when(fullDataOfCarRepository.findFullDataAllOfCars()).thenReturn(list);
+
+        var result = carService.findFullDataAllOfCars();
+
+        assertThat(result).containsAll(list);
     }
 }

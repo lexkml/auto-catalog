@@ -2,6 +2,7 @@ package com.kamelchukov.autocatalog.controller;
 
 import com.kamelchukov.autocatalog.model.dto.carDto.request.CarCreateRequest;
 import com.kamelchukov.autocatalog.model.dto.carDto.response.CarResponse;
+import com.kamelchukov.autocatalog.model.dto.carDto.response.FullDataOfCarResponse;
 import com.kamelchukov.autocatalog.service.CarService;
 import com.kamelchukov.autocatalog.transformer.CarTransformer;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,5 +42,17 @@ public class CarController {
     @Operation(summary = "Delete car")
     public void delete(@PathVariable Long id) {
         carService.delete(id);
+    }
+
+    @GetMapping("/cars/{id}/fullData")
+    @Operation(summary = "Find full data car by ID")
+    public FullDataOfCarResponse findFullDataCarById(@PathVariable Long id) {
+        return carService.findFullDataOfCarById(id);
+    }
+
+    @GetMapping("/cars/fullData")
+    @Operation(summary = "Find full data all of cars")
+    public List<FullDataOfCarResponse> findFullDataAllOfCars() {
+        return carService.findFullDataAllOfCars();
     }
 }

@@ -1,10 +1,12 @@
 package com.kamelchukov.autocatalog.service;
 
-import com.kamelchukov.autocatalog.exception.EntityNotFoundException;
 import com.kamelchukov.autocatalog.model.Car;
 import com.kamelchukov.autocatalog.model.dto.carDto.request.CarCreateRequest;
+import com.kamelchukov.autocatalog.model.dto.carDto.response.FullDataOfCarResponse;
 import com.kamelchukov.autocatalog.repository.CarRepository;
+import com.kamelchukov.autocatalog.repository.FullDataOfCarRepository;
 import com.kamelchukov.autocatalog.transformer.CarTransformer;
+import exception.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +18,11 @@ import java.util.List;
 public class CarService {
 
     private CarRepository carRepository;
+    private FullDataOfCarRepository fullDataOfCarRepository;
 
     public Car create(CarCreateRequest request) {
         return carRepository.save(CarTransformer.fromDto(request));
     }
-
     public Car findById(Long id) {
         return carRepository.findById(id)
                 .orElseThrow(() -> {
@@ -42,8 +44,18 @@ public class CarService {
         }
     }
 
-    //используется для обновления машины, при добавлении и удалении списка машин у пользователя
     public void save(Car car) {
         carRepository.save(car);
+    }
+
+    public FullDataOfCarResponse findFullDataOfCarById(Long id) {
+        return fullDataOfCarRepository.findFullDataOfCarById(id)
+                .orElseThrow(() -> {
+                    throw new EntityNotFoundException("Car with id = " + id + " was not found");
+                });
+    }
+
+    public List<FullDataOfCarResponse> findFullDataAllOfCars() {
+        return fullDataOfCarRepository.findFullDataAllOfCars();
     }
 }

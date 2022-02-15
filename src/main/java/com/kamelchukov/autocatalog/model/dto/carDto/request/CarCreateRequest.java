@@ -7,7 +7,6 @@ import lombok.Data;
 @Builder
 public class CarCreateRequest {
     private String model;
-    private char classCar;
     private String year;
     private String color;
     private Long personId;

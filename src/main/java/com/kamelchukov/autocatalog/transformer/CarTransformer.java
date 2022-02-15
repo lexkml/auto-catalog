@@ -11,7 +11,6 @@ public final class CarTransformer {
     public static Car fromDto(CarCreateRequest request) {
         return Car.builder()
                 .model(request.getModel())
-                .classCar(request.getClassCar())
                 .year(request.getYear())
                 .color(request.getColor())
                 .personId(request.getPersonId())
@@ -22,7 +21,6 @@ public final class CarTransformer {
         return CarResponse.builder()
                 .id(car.getId())
                 .model(car.getModel())
-                .classCar(car.getClassCar())
                 .year(car.getYear())
                 .color(car.getColor())
                 .personId(car.getPersonId())

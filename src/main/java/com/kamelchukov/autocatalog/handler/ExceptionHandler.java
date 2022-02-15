@@ -1,8 +1,8 @@
 package com.kamelchukov.autocatalog.handler;
 
-import com.kamelchukov.autocatalog.exception.EntityNotFoundException;
-import com.kamelchukov.autocatalog.exception.IncorrectDataException;
-import com.kamelchukov.autocatalog.exception.response.ExceptionResponse;
+import exception.EntityNotFoundException;
+import exception.IncorrectDataException;
+import exception.response.ExceptionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

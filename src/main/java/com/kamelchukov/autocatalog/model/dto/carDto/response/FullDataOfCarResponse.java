@@ -5,10 +5,12 @@ import lombok.Data;
 
 @Data
 @Builder
-public class CarResponse {
+public class FullDataOfCarResponse {
     private Long id;
     private String model;
     private String year;
     private String color;
     private Long personId;
+    private String firstName;
+    private String lastName;
 }
