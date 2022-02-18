@@ -1,12 +1,12 @@
 package com.kamelchukov.autocatalog.service;
 
+import com.common.exception.EntityNotFoundException;
+import com.common.model.dto.carDto.response.FullDataOfCarResponse;
 import com.kamelchukov.autocatalog.model.Car;
 import com.kamelchukov.autocatalog.model.dto.carDto.request.CarCreateRequest;
-import com.kamelchukov.autocatalog.model.dto.carDto.response.FullDataOfCarResponse;
 import com.kamelchukov.autocatalog.repository.CarRepository;
 import com.kamelchukov.autocatalog.repository.FullDataOfCarRepository;
 import com.kamelchukov.autocatalog.transformer.CarTransformer;
-import exception.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -144,9 +144,9 @@ class CarServiceTest {
     @Test
     void findFullDataAllOfCarsTest_successfulCase() {
         var list = List.of(FULL_DATA_OF_CAR);
-        when(fullDataOfCarRepository.findFullDataAllOfCars()).thenReturn(list);
+        when(fullDataOfCarRepository.findFullDataForAllCars()).thenReturn(list);
 
-        var result = carService.findFullDataAllOfCars();
+        var result = carService.findFullDataForAllCars();
 
         assertThat(result).containsAll(list);
     }

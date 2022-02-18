@@ -1,12 +1,12 @@
 package com.kamelchukov.autocatalog.service;
 
+import com.common.exception.EntityNotFoundException;
+import com.common.model.dto.carDto.response.FullDataOfCarResponse;
 import com.kamelchukov.autocatalog.model.Car;
 import com.kamelchukov.autocatalog.model.dto.carDto.request.CarCreateRequest;
-import com.kamelchukov.autocatalog.model.dto.carDto.response.FullDataOfCarResponse;
 import com.kamelchukov.autocatalog.repository.CarRepository;
 import com.kamelchukov.autocatalog.repository.FullDataOfCarRepository;
 import com.kamelchukov.autocatalog.transformer.CarTransformer;
-import exception.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -55,7 +55,7 @@ public class CarService {
                 });
     }
 
-    public List<FullDataOfCarResponse> findFullDataAllOfCars() {
-        return fullDataOfCarRepository.findFullDataAllOfCars();
+    public List<FullDataOfCarResponse> findFullDataForAllCars() {
+        return fullDataOfCarRepository.findFullDataForAllCars();
     }
 }
