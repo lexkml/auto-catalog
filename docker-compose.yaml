@@ -1,0 +1,46 @@
+version: "3"
+
+volumes:
+  db-volume:
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    container_name: "postgres"
+    environment:
+      POSTGRES_DB: auto
+      POSTGRES_USER: Alex
+      POSTGRES_PASSWORD: Alex
+    ports:
+      - "5433:5432"
+    volumes:
+      - db-volume:/var/lib/postgresql/data
+
+  auto-catalog:
+    container_name: "auto-catalog"
+    build: ./
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/auto
+      SPRING_DATASOURCE_USERNAME: Alex
+      SPRING_DATASOURCE_PASSWORD: Alex
+
+  auto-shop:
+    container_name: "auto-shop"
+    build: /Users/lexkml/IdeaProjects/red-collar/auto-shop
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+      - auto-catalog
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/auto
+      SPRING_DATASOURCE_USERNAME: Alex
+      SPRING_DATASOURCE_PASSWORD: Alex
+      AUTOCATALOGAPI_FEIGN_NAME: autoCatalogApi
+      AUTOCATALOGAPI_FEIGN_URL: http://localhost:8080
+
+

@@ -1,7 +1,5 @@
 package com.kamelchukov.autocatalog.service;
 
-import com.common.exception.EntityNotFoundException;
-import com.common.exception.IncorrectDataException;
 import com.kamelchukov.autocatalog.model.Car;
 import com.kamelchukov.autocatalog.model.Person;
 import com.kamelchukov.autocatalog.model.dto.personDto.request.PersonAddAndRemoveCarsRequest;
@@ -9,6 +7,8 @@ import com.kamelchukov.autocatalog.model.dto.personDto.request.PersonCreateReque
 import com.kamelchukov.autocatalog.model.dto.personDto.response.PersonResponse;
 import com.kamelchukov.autocatalog.repository.PersonRepository;
 import com.kamelchukov.autocatalog.transformer.PersonTransformer;
+import com.kamelchukov.common.exception.EntityNotFoundException;
+import com.kamelchukov.common.exception.IncorrectDataException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,8 +1,8 @@
 package com.kamelchukov.autocatalog.repository;
 
-import com.common.model.dto.carDto.response.FullDataOfCarResponse;
 import com.kamelchukov.autocatalog.model.Car;
 import com.kamelchukov.autocatalog.model.Person;
+import com.kamelchukov.common.model.dto.carDto.response.FullDataOfCarResponse;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

@@ -6,8 +6,8 @@ import com.kamelchukov.autocatalog.model.dto.personDto.request.PersonAddAndRemov
 import com.kamelchukov.autocatalog.model.dto.personDto.request.PersonCreateRequest;
 import com.kamelchukov.autocatalog.repository.PersonRepository;
 import com.kamelchukov.autocatalog.transformer.PersonTransformer;
-import exception.EntityNotFoundException;
-import exception.IncorrectDataException;
+import com.kamelchukov.common.exception.EntityNotFoundException;
+import com.kamelchukov.common.exception.IncorrectDataException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

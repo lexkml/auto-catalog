@@ -1,10 +1,10 @@
 package com.kamelchukov.autocatalog.controller;
 
-import com.common.model.dto.carDto.response.FullDataOfCarResponse;
 import com.kamelchukov.autocatalog.model.dto.carDto.request.CarCreateRequest;
 import com.kamelchukov.autocatalog.model.dto.carDto.response.CarResponse;
 import com.kamelchukov.autocatalog.service.CarService;
 import com.kamelchukov.autocatalog.transformer.CarTransformer;
+import com.kamelchukov.common.model.dto.carDto.response.FullDataOfCarResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;

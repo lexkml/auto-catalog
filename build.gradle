@@ -21,7 +21,7 @@ dependencies {
     implementation 'org.flywaydb:flyway-core:8.5.0'
     compileOnly 'org.projectlombok:lombok:1.18.22'
     annotationProcessor 'org.projectlombok:lombok:1.18.22'
-    implementation files ('/Users/alexandr/IdeaProjects/red-collar/common-lib/build/libs/common-lib-1.0-SNAPSHOT-plain.jar')
+    implementation files ('/Users/lexkml/IdeaProjects/red-collar/common-lib/build/libs/common-lib-1.0-SNAPSHOT-plain.jar')
 }
 
 test {
