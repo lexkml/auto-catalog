@@ -5,6 +5,7 @@ import com.kamelchukov.autocatalog.model.dto.personDto.request.PersonCreateReque
 import com.kamelchukov.autocatalog.model.dto.personDto.response.PersonResponse;
 
 public final class PersonTransformer {
+
     private PersonTransformer() {
     }
 

@@ -6,10 +6,12 @@ import com.kamelchukov.common.model.dto.carDto.response.FullDataOfCarResponse;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface FullDataOfCarRepository extends CrudRepository<Car, Person> {
 
     @Query("SELECT c.*, p.first_name, p.last_name FROM catalog.car c " +
@@ -18,6 +20,5 @@ public interface FullDataOfCarRepository extends CrudRepository<Car, Person> {
 
     @Query("SELECT c.*, p.first_name, p.last_name FROM catalog.car c " +
             "LEFT JOIN catalog.person p on p.id = c.person_id")
-    List<FullDataOfCarResponse> findFullDataForAllCars();
-
+    List<FullDataOfCarResponse> findFullDataOfAllCars();
 }

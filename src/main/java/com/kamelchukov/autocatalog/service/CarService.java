@@ -23,6 +23,7 @@ public class CarService {
     public Car create(CarCreateRequest request) {
         return carRepository.save(CarTransformer.fromDto(request));
     }
+
     public Car findById(Long id) {
         return carRepository.findById(id)
                 .orElseThrow(() -> {
@@ -36,16 +37,12 @@ public class CarService {
         return list;
     }
 
-    public void delete(Long id) {
+    public void remove(Long id) {
         if (carRepository.existsById(id)) {
             carRepository.deleteById(id);
         } else {
             throw new EntityNotFoundException("Car with id = " + id + " was not found");
         }
-    }
-
-    public void save(Car car) {
-        carRepository.save(car);
     }
 
     public FullDataOfCarResponse findFullDataOfCarById(Long id) {
@@ -55,7 +52,11 @@ public class CarService {
                 });
     }
 
-    public List<FullDataOfCarResponse> findFullDataForAllCars() {
-        return fullDataOfCarRepository.findFullDataForAllCars();
+    public List<FullDataOfCarResponse> findFullDataOfAllCars() {
+        return fullDataOfCarRepository.findFullDataOfAllCars();
+    }
+
+    public void save(Car car) {
+        carRepository.save(car);
     }
 }

@@ -100,20 +100,20 @@ class CarServiceTest {
     }
 
     @Test
-    void deleteTest_successfulCase() {
+    void removeTest_successfulCase() {
         when(carRepository.existsById(anyLong())).thenReturn(true);
         doNothing().when(carRepository).deleteById(anyLong());
 
-        carService.delete(anyLong());
+        carService.remove(anyLong());
 
         verify(carRepository).deleteById(anyLong());
     }
 
     @Test
-    void deleteTest_IfCarNotFound() {
+    void removeTest_IfCarNotFound() {
         when(carRepository.existsById(anyLong())).thenReturn(false);
 
-        assertThrows(EntityNotFoundException.class, () -> carService.delete(anyLong()));
+        assertThrows(EntityNotFoundException.class, () -> carService.remove(anyLong()));
     }
 
     @Test
@@ -144,9 +144,9 @@ class CarServiceTest {
     @Test
     void findFullDataAllOfCarsTest_successfulCase() {
         var list = List.of(FULL_DATA_OF_CAR);
-        when(fullDataOfCarRepository.findFullDataForAllCars()).thenReturn(list);
+        when(fullDataOfCarRepository.findFullDataOfAllCars()).thenReturn(list);
 
-        var result = carService.findFullDataForAllCars();
+        var result = carService.findFullDataOfAllCars();
 
         assertThat(result).containsAll(list);
     }

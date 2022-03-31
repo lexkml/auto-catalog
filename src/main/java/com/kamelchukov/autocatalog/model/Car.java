@@ -5,9 +5,9 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+@Table("car")
 @Data
 @Builder
-@Table("car")
 public class Car {
     @Id
     private Long id;

@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
 @RestController
 @Tag(name = "Person controller")
+@AllArgsConstructor
 public class PersonController {
 
     private PersonService personService;

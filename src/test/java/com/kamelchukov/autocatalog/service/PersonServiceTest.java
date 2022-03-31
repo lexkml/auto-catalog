@@ -38,7 +38,7 @@ class PersonServiceTest {
     @Mock
     private PersonRepository personRepository;
 
-    private static final Car car = Car.builder()
+    private static final Car CAR = Car.builder()
             .id(2L)
             .model("Tesla")
             .color("Black")
@@ -46,7 +46,7 @@ class PersonServiceTest {
             .personId(null)
             .build();
 
-    private static final Person person = Person.builder()
+    private static final Person PERSON = Person.builder()
             .id(5L)
             .firstName("Ivan")
             .lastName("Ivanov")
@@ -55,32 +55,32 @@ class PersonServiceTest {
 
     @BeforeEach
     void beforeEach() {
-        lenient().when(personRepository.findById(anyLong())).thenReturn(Optional.of(person));
+        lenient().when(personRepository.findById(anyLong())).thenReturn(Optional.of(PERSON));
     }
 
     @Test
     void createTest_successfulCase() {
         var request = PersonCreateRequest.builder()
-                .firstName(person.getFirstName())
-                .lastName(person.getLastName())
+                .firstName(PERSON.getFirstName())
+                .lastName(PERSON.getLastName())
                 .build();
 
         var actual = PersonTransformer.fromDto(request);
-        actual.setId(person.getId());
-        actual.setCars(person.getCars());
+        actual.setId(PERSON.getId());
+        actual.setCars(PERSON.getCars());
 
-        when(personRepository.save(any(Person.class))).thenReturn(person);
+        when(personRepository.save(any(Person.class))).thenReturn(PERSON);
 
         personService.create(request);
 
-        assertEquals(person, actual);
+        assertEquals(PERSON, actual);
     }
 
     @Test
     void findByIdTest_successfulCase() {
         var actual = personService.findById(anyLong());
 
-        assertEquals(person, actual);
+        assertEquals(PERSON, actual);
     }
 
     @Test
@@ -92,7 +92,7 @@ class PersonServiceTest {
 
     @Test
     void findAllTest_successfulCase() {
-        var persons = List.of(person);
+        var persons = List.of(PERSON);
         when(personRepository.findAll()).thenReturn(persons);
 
         var actual = personService.findAll();
@@ -119,61 +119,61 @@ class PersonServiceTest {
 
     @Test
     void addCarsToPersonTest_successfulCase() {
-        var carToAdd = car;
+        var carToAdd = CAR;
         carToAdd.setPersonId(null);
 
         when(carService.findById(anyLong())).thenReturn(carToAdd);
         doNothing().when(carService).save(carToAdd);
 
-        personService.addCarsToPerson(person.getId(), Set.of(anyLong()));
+        personService.addCarsToPerson(PERSON.getId(), Set.of(anyLong()));
 
         verify(carService).save(any(Car.class));
     }
 
     @Test
     void addCarsToPersonTest_IfCarOwnedOtherPerson() {
-        var carToAdd = car;
+        var carToAdd = CAR;
         carToAdd.setPersonId(10L);
         when(carService.findById(anyLong())).thenReturn(carToAdd);
 
         assertThrows(IncorrectDataException.class,
-                () -> personService.addCarsToPerson(person.getId(), Set.of(anyLong())));
+                () -> personService.addCarsToPerson(PERSON.getId(), Set.of(anyLong())));
     }
 
     @Test
     void removeCarsFromPersonTest_successful() {
-        var carToRemove = car;
-        carToRemove.setPersonId(person.getId());
+        var carToRemove = CAR;
+        carToRemove.setPersonId(PERSON.getId());
 
         when(carService.findById(anyLong())).thenReturn(carToRemove);
         doNothing().when(carService).save(carToRemove);
-        PersonTransformer.toResponse(person);
+        PersonTransformer.toResponse(PERSON);
 
-        personService.removeCarsFromPerson(person.getId(), Set.of(anyLong()));
+        personService.removeCarsFromPerson(PERSON.getId(), Set.of(anyLong()));
 
         verify(carService).save(any(Car.class));
     }
 
     @Test
     void removeCarsFromPersonTest_ifCarNotOwnedThisPerson() {
-        var carToRemove = car;
+        var carToRemove = CAR;
         carToRemove.setPersonId(8L);
 
         when(carService.findById(anyLong())).thenReturn(carToRemove);
 
         assertThrows(IncorrectDataException.class,
-                () -> personService.removeCarsFromPerson(person.getId(), Set.of(anyLong())));
+                () -> personService.removeCarsFromPerson(PERSON.getId(), Set.of(anyLong())));
     }
 
     @Test
     void removeCarsFromPersonTest_ifPersonIdByCarIsNull() {
-        var carToRemove = car;
+        var carToRemove = CAR;
         carToRemove.setPersonId(null);
 
         when(carService.findById(anyLong())).thenReturn(carToRemove);
 
         assertThrows(IncorrectDataException.class,
-                () -> personService.removeCarsFromPerson(person.getId(), Set.of(anyLong())));
+                () -> personService.removeCarsFromPerson(PERSON.getId(), Set.of(anyLong())));
     }
 
     @Test
@@ -186,9 +186,9 @@ class PersonServiceTest {
         doReturn(null).when(personServiceSpy).removeCarsFromPerson(anyLong(), any());
         doReturn(null).when(personServiceSpy).addCarsToPerson(anyLong(), any());
 
-        personServiceSpy.addAndRemoveCarsFromPerson(person.getId(), request);
+        personServiceSpy.addAndRemoveCarsFromPerson(PERSON.getId(), request);
 
-        verify(personServiceSpy).removeCarsFromPerson(person.getId(), request.getCarsToRemove());
-        verify(personServiceSpy).addCarsToPerson(person.getId(), request.getCarsToAdd());
+        verify(personServiceSpy).removeCarsFromPerson(PERSON.getId(), request.getCarsToRemove());
+        verify(personServiceSpy).addCarsToPerson(PERSON.getId(), request.getCarsToAdd());
     }
 }

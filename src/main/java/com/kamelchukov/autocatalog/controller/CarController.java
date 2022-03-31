@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
 @RestController
 @Tag(name = "Car controller")
+@AllArgsConstructor
 public class CarController {
 
     private CarService carService;
@@ -39,12 +39,12 @@ public class CarController {
     }
 
     @DeleteMapping("/cars/{id}")
-    @Operation(summary = "Delete car")
-    public void delete(@PathVariable Long id) {
-        carService.delete(id);
+    @Operation(summary = "Remove car")
+    public void remove(@PathVariable Long id) {
+        carService.remove(id);
     }
 
-    @GetMapping("/cars/{id}/fullData")
+    @GetMapping(value = "/cars/{id}/fullData")
     @Operation(summary = "Find full data of car by ID")
     public FullDataOfCarResponse findFullDataOfCarById(@PathVariable Long id) {
         return carService.findFullDataOfCarById(id);
@@ -52,7 +52,7 @@ public class CarController {
 
     @GetMapping("/cars/fullData")
     @Operation(summary = "Find full data for all cars")
-    public List<FullDataOfCarResponse> findFullDataForAllCars() {
-        return carService.findFullDataForAllCars();
+    public List<FullDataOfCarResponse> findFullDataOfAllCars() {
+        return carService.findFullDataOfAllCars();
     }
 }
