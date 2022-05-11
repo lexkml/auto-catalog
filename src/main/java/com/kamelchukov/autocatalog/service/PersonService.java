@@ -9,6 +9,7 @@ import com.kamelchukov.autocatalog.repository.PersonRepository;
 import com.kamelchukov.autocatalog.transformer.PersonTransformer;
 import com.kamelchukov.common.exception.EntityNotFoundException;
 import com.kamelchukov.common.exception.IncorrectDataException;
+import com.kamelchukov.common.rabbit.RabbitSender;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ public class PersonService {
 
     private PersonRepository personRepository;
     private CarService carService;
+    private RabbitSender sender;
 
     public Person create(PersonCreateRequest request) {
         return personRepository.save(PersonTransformer.fromDto(request));
@@ -35,6 +37,7 @@ public class PersonService {
     }
 
     public List<Person> findAll() {
+        sender.sendMessage();
         List<Person> list = new ArrayList<>();
         personRepository.findAll().forEach(list::add);
         return list;

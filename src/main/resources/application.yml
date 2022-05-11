@@ -2,20 +2,14 @@ spring:
   datasource:
     username: Alex
     password: Alex
-    url: jdbc:postgresql://localhost:5434/auto
-    hikari:
-      schema: catalog
+    url: jdbc:postgresql://localhost:5434/auto?currentSchema=catalog
   main:
     allow-circular-references: true
+  flyway:
+    baseline-on-migrate: true
   rabbitmq:
     host: localhost
-    port: 15672
-    username: admin
-    password: admin
-
-flyway:
-  schemas: catalog
-  baseline-on-migrate: true
+    queue: message_service
 
 keycloak:
   auth-server-url: http://localhost:8484/auth
